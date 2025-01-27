@@ -1,0 +1,23 @@
+<html>
+
+<head>
+  <title>Etusivu</title>
+</head>
+
+<body>
+  <h1>Etusivu</h1>
+  <p>
+    {% if session.username %}
+    <p>
+        Hei {{ session.username }}!
+    </p>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+    <a href="/login">Kirjaudu sisään</a>
+    <a href="/register">Luo tunnus</a>
+    {% endif %}
+    <b>Tervetuloa elokuvien arvostelusovellukseen</b>!
+  </p>
+</body>
+
+</html>
