@@ -5,21 +5,20 @@
 </head>
 
 <body>
-  <h1>Etusivu</h1>
+  <h1>Tervetuloa elokuvien arvostelusovellukseen!</h1>
   <p>
     {% if session.username %}
     <p>
-        Hei {{ session.username }}!
+      Hei {{ session.username }}! <a href="/logout">Kirjaudu ulos</a>
     </p>
-    <a href="/new_item">Luo uusi arvostelu</a>
-    <a href="/logout">Kirjaudu ulos</a>
+    <a href="/new_item">Luo arvostelu</a>
     {% else %}
     <a href="/login">Kirjaudu sisään</a>
     <a href="/register">Luo tunnus</a>
     {% endif %}
-    <b>Tervetuloa elokuvien arvostelusovellukseen</b>!
+  <p>
+    <a href="/find_item">Etsi arvostelu</a>
   </p>
-
   <h2>Viimeisimmät arvostelut</h2>
   <ul>
   {% for item in items %}
