@@ -28,7 +28,11 @@ def new_item():
 @app.route("/create_item", methods=["POST"])
 def create_item():
     title = request.form["title"]
+    if len("title") > 50:
+        abort(403)
     description = request.form["description"]
+    if len(description) > 2000:
+        abort(403)
     user_id = session["user_id"]
     items.add_item(title, description, user_id)
     return redirect("/")
