@@ -29,7 +29,8 @@ def show_item(item_id):
     if not item:
         abort(404)
     classes = items.get_classes(item_id)
-    return render_template("show_item.html", item = item, classes = classes)
+    comments = items.get_comments(item_id)
+    return render_template("show_item.html", item = item, classes = classes, comments = comments)
     
 @app.route("/new_item")
 def new_item():
@@ -57,7 +58,7 @@ def create_item():
             if parts[1] not in all_classes[parts[0]]:
                 abort(403)
             classes.append((parts[0], parts[1]))
-            
+
     items.add_item(title, description, user_id, classes)
 
     return redirect("/")
@@ -124,6 +125,18 @@ def find_item():
         query = ""
         results = []
     return render_template("find_item.html", query=query, results=results)
+
+@app.route("/create_comment", methods=["POST"])
+def create_comment():
+        comment = request.form["comment"]
+        item_id = request.form["item_id"]
+        item = items.get_item(item_id)
+        if not item:
+            abort(404)
+        user_id = session["user_id"]    
+        items.add_comment(item_id, user_id, comment)
+        return redirect("/item/" + str(item_id))
+
 
 @app.route("/register")
 def register():

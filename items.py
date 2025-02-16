@@ -67,3 +67,15 @@ def find_items(query):
              WHERE title LIKE ?
              ORDER BY id DESC"""
     return db.query(sql, ["%" + query + "%"])
+
+def add_comment(item_id, user_id, comment):
+    sql = """INSERT INTO comments (item_id, user_id, comment) VALUES (?, ?, ?)"""
+    db.execute(sql, [item_id, user_id, comment])
+
+def get_comments(item_id):
+    sql = """SELECT comments.comment, users.id AS user_id, users.username
+             FROM comments
+             JOIN users ON comments.user_id = users.id
+             WHERE comments.item_id = ?
+             ORDER BY comments.id DESC"""
+    return db.query(sql, [item_id])

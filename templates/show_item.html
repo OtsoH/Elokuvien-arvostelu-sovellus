@@ -25,6 +25,26 @@
     <p>
         Tekijä: <a href="/user/{{ item.user_id }}"> {{item.username}} </a>
     </p>
+    <h2>Kommentit</h2>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            {{ comment.comment }}, <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a></li>
+        {% endfor %}
+    </ul>
+    {% if session.user_id %}
+    <form action="/create_comment" method="post">
+        <input type="hidden" name="item_id" value="{{ item.id }}" />
+        <p>
+            Lisää kommentti: <br />
+            <textarea name="comment" rows="5" cols="50"></textarea>
+        </p>
+        <input type="hidden" name="item_id" value="{{ item.id }}"/>
+        <input type="submit" value="Lähetä" />
+    </form>
+    {% else %}
+    <p>Kirjaudu sisään kommentoidaksesi.</p>
+    {% endif %}
     <p>
         <a href="/">Takaisin</a>
     </p>
