@@ -46,10 +46,16 @@ def create_item():
         abort(403)
     user_id = session["user_id"]
 
+    all_classes = items.get_all_classes()
+
     classes = []
     for entry in request.form.getlist("classes"):
         if entry:
             parts = entry.split(":")
+            if parts[0] not in all_classes:
+                abort(403)
+            if parts[1] not in all_classes[parts[0]]:
+                abort(403)
             classes.append((parts[0], parts[1]))
             
     items.add_item(title, description, user_id, classes)
@@ -63,7 +69,14 @@ def edit_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-    return render_template("edit_item.html", item=item)
+    all_classes = items.get_all_classes()
+    classes = {}
+    for single_class in all_classes:
+        classes[single_class] = ""
+    for entry in items.get_classes(item_id):
+        classes[entry["title"]] = entry["value"]
+
+    return render_template("edit_item.html", item=item, classes = classes, all_classes = all_classes)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -75,7 +88,14 @@ def update_item():
         abort(403)
     title = request.form["title"]
     description = request.form["description"]
-    items.update_item(item_id, title, description)
+
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0], parts[1]))
+
+    items.update_item(item_id, title, description, classes)
     return redirect("/item/" + str(item_id))
 
 @app.route("/delete_item/<int:item_id>", methods=["GET", "POST"])
