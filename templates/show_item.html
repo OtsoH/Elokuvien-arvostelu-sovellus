@@ -13,6 +13,13 @@
     </p>
     {% endif %}
     <p>
+    <ul>
+    {% for class in classes %}
+    <li>{{ class.title}}: {{ class.value }}</li>
+    {% endfor %}
+    </ul>
+    </p>
+    <p>
         {{item.description}}
     </p>
     <p>
