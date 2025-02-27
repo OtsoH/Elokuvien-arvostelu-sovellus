@@ -1,32 +1,29 @@
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Uusi arvostelu</title>
-</head>
-
-<body>
-  <form action="/create_item" method="post">
-    <p>
-      Elokuvan nimi: <br />
-      <input type="text" name="title" maxlength="50" />
-    </p>
-    {% for class in classes %}
-    <p>
-      {{ class }}: <br />
-      <select name="classes">
-        <option value="">(valitse)</option>
-        {% for option in classes[class] %}
-        <option value="{{ class }}:{{ option }}">{{ option }}</option>
-        {% endfor %}
-      </select>
-    </p>
-    {% endfor %}
-   <p>
-        Arvostelusi: <br />
-        <textarea name="description" rows="20" cols="100"></textarea>
-    </p>
-    <input type="submit" value="Lähetä" />
-  </form>
-</body>
-
-</html>
+{%block title %}Uusi arvostelu{% endblock %}
+  
+{%block content %}
+<h2>Luo arvostelu</h2>
+<form action="/create_item" method="post">
+  <p>
+    Elokuvan nimi: <br />
+    <input type="text" name="title" maxlength="50" />
+  </p>
+  {% for class in classes %}
+  <p>
+    {{ class }}: <br />
+    <select name="classes">
+      <option value="">(valitse)</option>
+      {% for option in classes[class] %}
+      <option value="{{ class }}:{{ option }}">{{ option }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  {% endfor %}
+  <p>
+      Arvostelusi: <br />
+      <textarea name="description" rows="20" cols="100"></textarea>
+  </p>
+  <input type="submit" value="Lähetä" />
+</form>
+{% endblock %}

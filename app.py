@@ -34,6 +34,8 @@ def show_item(item_id):
     
 @app.route("/new_item")
 def new_item():
+    if "user_id" not in session:
+        return redirect("/login")
     classes = items.get_all_classes()
     return render_template("new_item.html", classes = classes)
 

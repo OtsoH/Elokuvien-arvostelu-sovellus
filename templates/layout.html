@@ -1,0 +1,27 @@
+<html>
+
+<head>
+  <title>Etusivu</title>
+</head>
+
+<body>
+    <h1>Tervetuloa elokuvien arvostelusovellukseen!</h1>
+    <p>
+        <a href="/">Etusivu</a>
+    </p>
+        {% if session.username %}
+    <p>
+        Hei {{ session.username }}! <a href="/logout">Kirjaudu ulos</a>
+    </p>
+    <p>
+        <a href="/new_item">Luo arvostelu</a>
+        {% else %}
+        <a href="/login">Kirjaudu sisään</a>
+        <a href="/register">Luo tunnus</a>
+        {% endif %}
+        <a href="/find_item">Etsi arvostelu</a>
+    </p>
+    {% block content %} {% endblock %}
+</body>
+
+</html>

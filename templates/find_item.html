@@ -1,11 +1,12 @@
 <html>
+{% extends "layout.html" %}
 
-<head>
-    <title>Etsi arvostelu</title>
-</head>
+{%block title %}Etsi arvostelu{% endblock %}
+    
+{%block content %}
 
 <body>
-    <h1>Etsi arvostelu</h1>
+    <h2>Haku</h2>
     <form action="/find_item" method="get">
         <p>
             Elokuvan nimi: <br />
@@ -22,6 +23,6 @@
         {% endfor %}
     </ul>
     {% endif %}
-
+{% endblock %}
 </body>
 </html>
