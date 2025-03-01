@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
 
-{%block title %}Arvostelun poisto{% endblock %}
-  
-{%block content %}
-<h2>Poista arvostelu</h2>
-  <p> Arvostelusi: {{ item.title }}</p>
+{% block title %}Arvostelun poisto{% endblock %}
+
+{% block content %}
+<div class="delete-item-container">
+  <h2>Poista arvostelu</h2>
+  <p>Arvostelusi: <strong>{{ item.title }}</strong></p>
   <p>Haluatko varmasti poistaa tämän arvostelun?</p>
   <form action="/delete_item/{{ item.id }}" method="POST">
-  <input type="submit" name="delete" value="Kyllä" /> 
-  <input type="submit" name="back" value="Ei" />
+    <button type="submit" name="delete" class="btn">Kyllä</button>
+    <button type="submit" name="back" class="btn">Ei</button>
   </form>
+</div>
 {% endblock %}

@@ -1,34 +1,39 @@
 {% extends "layout.html" %}
 
-{%block title %}Muokkaa arvostelua{% endblock %}
-  
-{%block content %}
-<h2>Muokkaa arvostelua</h2>
-<form action="/update_item" method="post">
-  <p>
-    Elokuvan nimi: <br />
-    <input type="text" name="title" value="{{ item.title }}"/>
-  </p>
-  {% for class in classes %}
-  <p>
-    {{ class }}: <br />
-    <select name="classes">
-    <option value="">(valitse)</option>
-    {% for option in all_classes[class] %}
-    {% if classes[class] == option %}
-      <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
-    {% else %}
-      <option value="{{ class }}:{{ option }}">{{ option }}</option>
-    {% endif %}
-     {% endfor %}
-    </select>
-    </p>
+{% block title %}Muokkaa arvostelua{% endblock %}
+
+{% block content %}
+<div class="edit-item-container">
+  <h2>Muokkaa arvostelua</h2>
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% endif %}
+  <form action="/update_item" method="post">
+    <div class="form-group">
+      <label for="title">Elokuvan nimi:</label>
+      <input type="text" id="title" name="title" class="input-field" value="{{ item.title }}" required />
+    </div>
+    {% for class in classes %}
+    <div class="form-group">
+      <label for="{{ class }}">{{ class }}:</label>
+      <select id="{{ class }}" name="classes" class="input-field">
+        <option value="">(valitse)</option>
+        {% for option in all_classes[class] %}
+        {% if classes[class] == option %}
+          <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
+        {% else %}
+          <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
     {% endfor %}
-    <p>
-      Arvostelusi: <br />
-      <textarea name="description" rows="20" cols="100">{{ item.description }}</textarea>
-    </p>
-  <input type="hidden" name="item_id" value="{{ item.id }}" />
-  <input type="submit" value="Tallenna muutokset" />
-</form>
+    <div class="form-group">
+      <label for="description">Arvostelusi:</label>
+      <textarea id="description" name="description" class="input-field large-textarea" rows="20" cols="100" required>{{ item.description }}</textarea>
+    </div>
+    <input type="hidden" name="item_id" value="{{ item.id }}" />
+    <button type="submit" class="btn">Tallenna muutokset</button>
+  </form>
+</div>
 {% endblock %}

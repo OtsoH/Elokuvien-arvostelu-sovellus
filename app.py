@@ -130,6 +130,9 @@ def find_item():
 
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
+        if "user_id" not in session:
+            return redirect("/login")
+
         comment = request.form["comment"]
         item_id = request.form["item_id"]
         item = items.get_item(item_id)
@@ -171,7 +174,8 @@ def login():
         session["username"] = username
         return redirect("/")
     else:
-        return "VIRHE: väärä tunnus tai salasana"
+        error = "VIRHE: väärä tunnus tai salasana"
+        return render_template("login.html", error=error)
 
 @app.route("/logout")
 def logout():

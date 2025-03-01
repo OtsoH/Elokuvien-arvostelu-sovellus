@@ -27,8 +27,9 @@ def get_classes(item_id):
     return db.query(sql, [item_id])   
 
 def get_items():
-    sql = """SELECT items.id, items.title, users.id users_id, users.username, COUNT(comments.id) comments_count
-                FROM items JOIN users ON items.user_id = users.id
+    sql = """SELECT items.id, items.title, users.id AS user_id, users.username, COUNT(comments.id) comments_count
+                FROM items 
+                JOIN users ON items.user_id = users.id
                 LEFT JOIN comments ON items.id = comments.item_id
                 GROUP BY items.id
                 ORDER BY items.id DESC"""
@@ -59,6 +60,9 @@ def update_item(item_id, title, description, classes):
         db.execute(sql, [item_id, title, value])
 
 def delete_item(item_id):
+    sql = "DELETE FROM comments WHERE item_id = ?"
+    db.execute(sql, [item_id])
+
     sql = """DELETE FROM item_classes WHERE item_id = ?"""
     db.execute(sql, [item_id])
 

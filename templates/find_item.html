@@ -1,28 +1,28 @@
 <html>
 {% extends "layout.html" %}
 
-{%block title %}Etsi arvostelu{% endblock %}
-    
-{%block content %}
+{% block title %}Etsi arvostelu{% endblock %}
 
-<body>
-    <h2>Haku</h2>
-    <form action="/find_item" method="get">
-        <p>
-            Elokuvan nimi: <br />
-            <input type="text" name="query" value="{{ query }}">
-        </p>
-        <input type="submit" value="Etsi" />
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-    </form>
-    {% if query %}
-    <h2>Hakutulokset</h2>
-    <ul>
-        {% for item in results %}
-        <li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+<h2>Haku</h2>
+<form action="/find_item" method="get">
+  <div class="form-group">
+    <label for="query">Elokuvan nimi:</label>
+    <input type="text" id="query" name="query" class="input-field" value="{{ query }}">
+  </div>
+  <button type="submit" class="btn">Etsi</button>
+</form>
+{% if query %}
+<h2>Hakutulokset</h2>
+<ul>
+{% for item in results %}
+<div class="item"> 
+<li><a href="/item/{{ item.id }}">{{ item.title }}</a></li>
+</div>
+{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
-</body>
 </html>
