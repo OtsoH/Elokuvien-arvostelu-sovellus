@@ -25,6 +25,7 @@
       <label for="description">Arvostelusi:</label>
       <textarea id="description" name="description" class="input-field large-textarea" rows="20" cols="100" required></textarea>
     </div>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <button type="submit" class="btn">Lähetä</button>
   </form>
 </div>

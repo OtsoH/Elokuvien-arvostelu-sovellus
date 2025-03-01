@@ -1,3 +1,4 @@
+import secrets
 import sqlite3
 from flask import Flask
 from flask import abort, redirect, render_template, request, session
@@ -8,6 +9,10 @@ import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
 
 @app.route("/")
 def index():
@@ -41,6 +46,7 @@ def new_item():
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
+    check_csrf()
     title = request.form["title"]
     if len("title") > 50:
         abort(403)
@@ -83,6 +89,7 @@ def edit_item(item_id):
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
+    check_csrf()
     item_id = request.form["item_id"]
     item =items.get_item(item_id)
     if not item:
@@ -112,6 +119,7 @@ def delete_item(item_id):
         return render_template("delete_item.html", item=item)
     
     if request.method == "POST":
+        check_csrf()
         if "delete" in request.form:
             items.delete_item(item_id)
             return redirect("/")
@@ -130,17 +138,18 @@ def find_item():
 
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
-        if "user_id" not in session:
-            return redirect("/login")
+    check_csrf()
+    if "user_id" not in session:
+        return redirect("/login")
 
-        comment = request.form["comment"]
-        item_id = request.form["item_id"]
-        item = items.get_item(item_id)
-        if not item:
-            abort(404)
-        user_id = session["user_id"]    
-        items.add_comment(item_id, user_id, comment)
-        return redirect("/item/" + str(item_id))
+    comment = request.form["comment"]
+    item_id = request.form["item_id"]
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    user_id = session["user_id"]    
+    items.add_comment(item_id, user_id, comment)
+    return redirect("/item/" + str(item_id))
 
 
 @app.route("/register")
@@ -172,6 +181,7 @@ def login():
     if user_id:
         session["user_id"] = user_id
         session["username"] = username
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
     else:
         error = "VIRHE: väärä tunnus tai salasana"

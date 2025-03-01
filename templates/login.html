@@ -21,6 +21,7 @@
       <label for="password">Salasana:</label>
       <input type="password" id="password" name="password" class="input-field" required />
     </div>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <button type="submit" class="btn">Kirjaudu sisään</button>
   </form>
 </div>

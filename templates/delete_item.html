@@ -8,6 +8,7 @@
   <p>Arvostelusi: <strong>{{ item.title }}</strong></p>
   <p>Haluatko varmasti poistaa tämän arvostelun?</p>
   <form action="/delete_item/{{ item.id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <button type="submit" name="delete" class="btn">Kyllä</button>
     <button type="submit" name="back" class="btn">Ei</button>
   </form>
