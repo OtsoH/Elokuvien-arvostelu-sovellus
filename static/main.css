@@ -118,6 +118,7 @@ h1 {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+    margin-bottom: 10px;
 }
 
 .description {

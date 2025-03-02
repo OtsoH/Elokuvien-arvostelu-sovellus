@@ -1,8 +1,10 @@
 import secrets
 import sqlite3
+
 from flask import Flask
 from flask import abort, redirect, render_template, request, session
 import markupsafe
+
 import config
 import db
 import items
@@ -20,20 +22,18 @@ def show_lines(content):
     content = content.replace("\n", "<br />")
     return markupsafe.Markup(content)
 
-
 @app.route("/")
 def index():
     all_items = items.get_items()
-    return render_template("index.html", items = all_items)
+    return render_template("index.html", items=all_items)
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    items = users.get_items(user_id)
-    return render_template("show_user.html", user = user, items = items)
-
+    user_items = users.get_items(user_id)
+    return render_template("show_user.html", user=user, items=user_items)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
@@ -42,14 +42,14 @@ def show_item(item_id):
         abort(404)
     classes = items.get_classes(item_id)
     comments = items.get_comments(item_id)
-    return render_template("show_item.html", item = item, classes = classes, comments = comments)
+    return render_template("show_item.html", item=item, classes=classes, comments=comments)
     
 @app.route("/new_item")
 def new_item():
     if "user_id" not in session:
         return redirect("/login")
     classes = items.get_all_classes()
-    return render_template("new_item.html", classes = classes)
+    return render_template("new_item.html", classes=classes)
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
@@ -75,7 +75,6 @@ def create_item():
             classes.append((parts[0], parts[1]))
 
     items.add_item(title, description, user_id, classes)
-
     return redirect("/")
 
 @app.route("/edit_item/<int:item_id>")
@@ -91,8 +90,7 @@ def edit_item(item_id):
         classes[single_class] = ""
     for entry in items.get_classes(item_id):
         classes[entry["title"]] = entry["value"]
-
-    return render_template("edit_item.html", item=item, classes = classes, all_classes = all_classes)
+    return render_template("edit_item.html", item=item, classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -148,7 +146,6 @@ def create_comment():
     check_csrf()
     if "user_id" not in session:
         return redirect("/login")
-
     comment = request.form["comment"]
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
@@ -169,12 +166,14 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        error = "VIRHE: salasanat eivät ole samat"
+        return render_template("register.html", error=error)
     try:
         users.create_user(username, password1)
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
-    return "Tunnus luotu"
+        error = "VIRHE: tunnus on jo varattu"
+        return render_template("register.html", error=error)
+    return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

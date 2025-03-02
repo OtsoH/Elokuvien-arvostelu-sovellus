@@ -19,17 +19,15 @@
 </p>
 
 <p class="description">
-{{ item.description | show_lines }}
+    <p><strong>Kuvaus: </strong><p>{{ item.description | show_lines }}
 </p>
 
 <h2>Kommentit</h2>
-<div>
-    {% for comment in comments %}
-    <div class="comment">
-        <a href="/user/{{ comment.user_id }}" class="btn-small">{{ comment.username }}</a> <p>{{ comment.comment }}</p>
-    </div>
-    {% endfor %}
+{% for comment in comments %}
+<div class="comment">
+<a href="/user/{{ comment.user_id }}" class="btn-small">{{ comment.username }}</a> <p>{{ comment.comment }}</p>
 </div>
+{% endfor %}
 
 {% if session.user_id %}
 <form action="/create_comment" method="post">
